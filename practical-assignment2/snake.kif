@@ -256,8 +256,7 @@
 ;; TODO: Non-tail body cells remain body cells
 ;; Example rule head:
 (<= (next (cell ?x2 ?y2 ?body))
-	(body ?body ?player)
-	(tail ?tail ?player)
+	(tail ?tail ?body)
 	(true (cell ?x2 ?y2 ?body))
 	(not (true (cell ?x2 ?y2 ?tail)))
 )
@@ -267,9 +266,9 @@
 ;; Example rule head:
 (<= (next (connected ?x1 ?y1 ?x2 ?y2 ?body))
 	(body ?body ?player)
-	(tail ?tail ?player)
-	(not (true (cell ?x2 ?y2 ?tail)))
-	(connected ?x1 ?y1 ?x2 ?y2 ?body)
+	(tail ?tail ?body)
+	(not (true (cell ?x1 ?y1 ?tail)))
+	(true (connected ?x1 ?y1 ?x2 ?y2 ?body))
 )
 
 
@@ -280,8 +279,8 @@
 	(body ?body ?player)
 	(head ?head ?player)
 	(does ?move ?player)
-	(nextCell ?move ?x2 ?y2 ?x1 ?y1)
-	(true (cell ?x2 ?y2 ?head))
+	(nextCell ?move ?x1 ?y1 ?x2 ?y2)
+	(true (cell ?x1 ?y1 ?head))
 )
 
 
@@ -291,11 +290,11 @@
 ;; TODO: set the following auxilary relation if the player is going to move onto
 ;; apple cell
 ;; Example rule head:
-(<= (movingOntoApple ?player)
+;(<= (movingOntoApple ?player)
 	;(head ?head ?player)
 	;(does ?move ?player)
 	;()
-)
+;)
 
 
 ;; TODO: set the following auxilary relation if the player is going to move onto
@@ -312,9 +311,8 @@
 ;; TODO: Move tail position to next position in ``connected''-chain
 ;; Example rule head:
 (<= (next (cell ?x2 ?y2 ?tail))
-    (tail ?tail ?player)
-    (body ?body ?player)
-    (connected ?x2 ?y2 ?x1 ?y1 ?body)
+    (tail ?tail ?body)
+    (true (connected ?x1 ?y1 ?x2 ?y2 ?body))
     (true (cell ?x1 ?y1 ?tail))
 )
 
