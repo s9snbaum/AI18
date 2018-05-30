@@ -191,15 +191,15 @@
 ; )
 
 
-(<= (legal ?player ?move)
-	(head ?head ?player)
-	(nextCell ?move ?x1 ?y1 ?x2 ?y2)
-	(true (cell ?x1 ?y1 ?head))
-	(not (true (cell ?x2 ?y2 wall)))
+;(<= (legal ?player ?move)
+	;(head ?head ?player)
+	;(nextCell ?move ?x1 ?y1 ?x2 ?y2)
+	;(true (cell ?x1 ?y1 ?head))
+	;(not (true (cell ?x2 ?y2 wall)))
 	;;TODO	
 	;(not (does ?move ?player))
 
-)
+;)
 
 
 ;only left is possible; TODO: delete this
@@ -268,7 +268,7 @@
 (<= (next (connected ?x1 ?y1 ?x2 ?y2 ?body))
 	(body ?body ?player)
 	(tail ?tail ?player)
-	(not (true (cell ?x1 ?y1 ?tail)))
+	(not (true (cell ?x2 ?y2 ?tail)))
 	(connected ?x1 ?y1 ?x2 ?y2 ?body)
 )
 
@@ -311,9 +311,12 @@
 
 ;; TODO: Move tail position to next position in ``connected''-chain
 ;; Example rule head:
-; (<= (next (cell ?x2 ?y2 ?tail))
-;;;;; ... rule body ...
-; )
+(<= (next (cell ?x2 ?y2 ?tail))
+    (tail ?tail ?player)
+    (body ?body ?player)
+    (connected ?x2 ?y2 ?x1 ?y1 ?body)
+    (true (cell ?x1 ?y1 ?tail))
+)
 
 
 
