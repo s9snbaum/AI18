@@ -191,20 +191,22 @@
 ; )
 
 
-;(<= (legal ?player ?move)
-	;(head ?head ?player)
-	;(nextCell ?move ?x1 ?y1 ?x2 ?y2)
-	;(true (cell ?x1 ?y1 ?head))
-	;(not (true (cell ?x2 ?y2 wall)))
-	;;TODO	
-	;(not (does ?move ?player))
-
-;)
+(<= (legal ?player ?move)
+	;(1)
+    (head ?head ?player)
+	(nextCell ?move ?x1 ?y1 ?x2 ?y2)
+	(true (cell ?x1 ?y1 ?head))
+	(not (true (cell ?x2 ?y2 wall)))
+    
+    ;(2)
+    (body ?body ?player)
+    (not (true (connected ?x2 ?y2 ?x1 ?y1 ?body)))
+)
 
 
 ;only left is possible; TODO: delete this
-(legal red moveLeft)
-(legal blue moveLeft)
+;(legal red moveLeft)
+;(legal blue moveLeft)
 
 
 
@@ -261,11 +263,16 @@
 	(not (true (cell ?x2 ?y2 ?tail)))
 )
 
+(<= (next (cell ?x2 ?y2 ?body))
+    (body ?body ?player)
+    (head ?head ?player)
+    (true (cell ?x2 ?y2 ?head))    
+)
+
 
 ;; TODO: connected facts for non-tail cells remain invariant
 ;; Example rule head:
 (<= (next (connected ?x1 ?y1 ?x2 ?y2 ?body))
-	(body ?body ?player)
 	(tail ?tail ?body)
 	(not (true (cell ?x1 ?y1 ?tail)))
 	(true (connected ?x1 ?y1 ?x2 ?y2 ?body))
@@ -275,11 +282,12 @@
 ;; TODO: ceate new connected fact, connecting previous head cell to the new
 ;; head cell
 ;; Example rule head:
+
 (<= (next (connected ?x1 ?y1 ?x2 ?y2 ?body))
 	(body ?body ?player)
 	(head ?head ?player)
-	(does ?move ?player)
 	(nextCell ?move ?x1 ?y1 ?x2 ?y2)
+	(does ?player ?move)
 	(true (cell ?x1 ?y1 ?head))
 )
 
