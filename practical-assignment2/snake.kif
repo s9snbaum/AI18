@@ -269,8 +269,8 @@
 ;; Example rule head:
 (<= (next (connected ?x1 ?y1 ?x2 ?y2 ?body))
 	(tail ?tail ?body)
+    (true (connected ?x1 ?y1 ?x2 ?y2 ?body))
 	(not (true (cell ?x1 ?y1 ?tail)))
-	(true (connected ?x1 ?y1 ?x2 ?y2 ?body))
 )
 
 
@@ -280,10 +280,10 @@
 
 (<= (next (connected ?x1 ?y1 ?x2 ?y2 ?body))
 	(body ?body ?player)
-	(head ?head ?player)
-	(nextCell ?move ?x1 ?y1 ?x2 ?y2)
-	(does ?player ?move)
+    (does ?player ?move)
+	(head ?head ?player)	
 	(true (cell ?x1 ?y1 ?head))
+    (nextCell ?move ?x1 ?y1 ?x2 ?y2)
 )
 
 
@@ -321,8 +321,10 @@
 ;; Example rule head:
 (<= (next (cell ?x2 ?y2 ?tail))
     (tail ?tail ?body)
-    (true (connected ?x1 ?y1 ?x2 ?y2 ?body))
+    (body ?body ?player)
     (true (cell ?x1 ?y1 ?tail))
+    (not(movingOntoApple ?player))
+    (true (connected ?x1 ?y1 ?x2 ?y2 ?body))
 )
 
 
@@ -375,9 +377,9 @@
 ;; Example rule head:
 (<= (next (cell ?x1 ?y1 ?body))
     (tail ?tail ?body)
-    (true (cell ?x1 ?y1 ?tail))
     (body ?body ?player)
     (movingOntoApple ?player)
+    (true (cell ?x1 ?y1 ?tail))
     (true (connected ?x1 ?y1 ?x2 ?y2 ?body))
 )
 
@@ -401,7 +403,7 @@
 
 ;; Step limit is reached:
 (<= stepLimit
-    (true (step 10)))
+    (true (step 40)))
 
 
 ;; TODO: Player is dead when it ran into the head of the other player
