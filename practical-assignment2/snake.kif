@@ -406,24 +406,28 @@
     (true (step 40)))
 
 
-;; TODO: Player is dead when it ran into the head of the other player
-;; Example rule head for blue player:
+;; Player is dead when it ran into the head of the other player
+;; blue player:
 (<= (dead blue)
+    ; blue is dead if both heads are in the same cell.
+    ; In this case red is dead as well.
     (true (cell ?x ?y blueHead))
     (true (cell ?x ?y redHead))
 )
 ;
-;; Example rule head for red player:
+;; red player:
 (<= (dead red)
+    ; red is dead if both heads are in the same cell.
+    ; In this case blue is dead as well.
     (true (cell ?x ?y redHead))
     (true (cell ?x ?y blueHead))
 )
 
 
-;; TODO: Player is dead when it ran into its own or another player's body
-;; Example rule head:
+;; Player is dead when it ran into its own or another player's body
 (<= (dead ?player)
     (head ?head ?player)
+    ; the player is dead if its head is in the same cell as one of the body cells
     (or (body ?body red) (body ?body blue))
     (true (cell ?x ?y ?head))
     (true (cell ?x ?y ?body))
