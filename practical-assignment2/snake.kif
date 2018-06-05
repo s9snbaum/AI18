@@ -290,9 +290,9 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; auxilary relations
 
-;; TODO: set the following auxilary relation if the player is going to move onto
-;; apple cell
-;; Example rule head:
+;; Define function moveOntoApple for player to check if the next cell has an apple
+;; Thsi function is used as a predicate to extend length and reward points
+
 (<= (movingOntoApple ?player)
     (does ?player ?move)
 	(head ?head ?player)
@@ -302,9 +302,9 @@
 )
 
 
-;; TODO: set the following auxilary relation if the player is going to move onto
-;; coin cell
-;; Example rule head:
+;; Define function moveOntoApple for player to check if the next cell has an coin
+;; This function is used as a predicate to reward points
+
 (<= (movingOntoCoin ?player)
     (does ?player ?move)
     (head ?head ?player)
@@ -317,8 +317,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; if player does not move onto an apple cell
 
-;; TODO: Move tail position to next position in ``connected''-chain
-;; Example rule head:
+;; Check if the snake consumed apple. If not, do not extend tail. The tail reamins connected to the body
+
 (<= (next (cell ?x2 ?y2 ?tail))
     (tail ?tail ?body)
     (body ?body ?player)
@@ -331,9 +331,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; does not move onto coin or apple cell
 
-;; TODO: points stay the same if the player does not move onto either a coin cell
-;; or an apple cell
-;; Example rule head:
+;; If the player does not move into coin or apple, the points remain the same
+
 (<= (next (collectedPoints ?player ?i))
     (not (movingOntoApple ?player))
     (not (movingOntoCoin ?player))
@@ -342,8 +341,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; if player moves onto coin cell
 
-;; TODO: increase points by three if the player moves onto a coin cell
-;; Example rule head:
+;; If the snake consumed a coin increment 3 points
+
 (<= (next (collectedPoints ?player ?j))
     (movingOntoCoin ?player)
     (true (collectedPoints ?player ?i))
@@ -354,8 +353,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; if player moves onto apple cell
 
-;; TODO: increase points by one
-;; Example rule head:
+;; If a snake consumes an apple, reward 1 point
+
 (<= (next (collectedPoints ?player ?j))
     (movingOntoApple ?player)
     (true (collectedPoints ?player ?i))
@@ -363,8 +362,8 @@
 )
 
 
-;; TODO: Snake is extended: tail remains at current position.
-;; Example rule head:
+;; If the snake consumes an apple, it extends in length. Hence tail remains in the same cell for the following state when (movingOntoApple ?player) is true
+
 (<= (next (cell ?x ?y ?tail))
     (true (cell ?x ?y ?tail))
     (tail ?tail ?body)
@@ -373,8 +372,8 @@
 )
 
 
-;; TODO: Snake is extended: tail cell remains part of the snake's body.
-;; Example rule head:
+;; When the snake enlongates and movingOntoApple is true, make the cell successor to the tail a body cell
+
 (<= (next (cell ?x1 ?y1 ?body))
     (tail ?tail ?body)
     (body ?body ?player)
@@ -384,9 +383,8 @@
 )
 
 
-;; TODO: Snake is extended: tail remains at current position, so also the
-;; connected fact for tail of the snake remains true.
-;; Example rule head:
+;; When the snake elongates and (movingOntoApple) is true keep the tail and new body cell connected
+
 (<= (next (connected ?x1 ?y1 ?x2 ?y2 ?body))
     (body ?body ?player)
     (movingOntoApple ?player)
