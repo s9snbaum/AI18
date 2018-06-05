@@ -294,11 +294,11 @@
 ;; apple cell
 ;; Example rule head:
 (<= (movingOntoApple ?player)
-    (head ?head ?player)
     (does ?player ?move)
-    (nextCell ?move ?x1 ?y1 ?x2 ?y2)
+	(head ?head ?player)
     (true (cell ?x1 ?y1 ?head))
     (true (cell ?x2 ?y2 apple))
+	(nextCell ?move ?x1 ?y1 ?x2 ?y2)
 )
 
 
@@ -306,11 +306,11 @@
 ;; coin cell
 ;; Example rule head:
 (<= (movingOntoCoin ?player)
-    (head ?head ?player)
     (does ?player ?move)
-    (nextCell ?move ?x1 ?y1 ?x2 ?y2)
+    (head ?head ?player)
     (true (cell ?x1 ?y1 ?head))
     (true (cell ?x2 ?y2 coin))
+    (nextCell ?move ?x1 ?y1 ?x2 ?y2)
 )
 
 
@@ -363,24 +363,33 @@
 
 ;; TODO: Snake is extended: tail remains at current position.
 ;; Example rule head:
-; (<= (next (cell ?x ?y ?tail))
-;;;;; ... rule body ...
-; )
+(<= (next (cell ?x ?y ?tail))
+    (true (cell ?x ?y ?tail))
+    (tail ?tail ?body)
+    (body ?body ?player)
+    (movingOntoApple ?player)
+)
 
 
 ;; TODO: Snake is extended: tail cell remains part of the snake's body.
 ;; Example rule head:
-; (<= (next (cell ?x ?y ?body))
-;;;;; ... rule body ...
-; )
+(<= (next (cell ?x1 ?y1 ?body))
+    (tail ?tail ?body)
+    (true (cell ?x1 ?y1 ?tail))
+    (body ?body ?player)
+    (movingOntoApple ?player)
+    (true (connected ?x1 ?y1 ?x2 ?y2 ?body))
+)
 
 
 ;; TODO: Snake is extended: tail remains at current position, so also the
 ;; connected fact for tail of the snake remains true.
 ;; Example rule head:
-; (<= (next (connected ?x1 ?y1 ?x2 ?y2 ?body))
-;;;;; ... rule body ...
-; )
+(<= (next (connected ?x1 ?y1 ?x2 ?y2 ?body))
+    (body ?body ?player)
+    (movingOntoApple ?player)
+    (true (connected ?x1 ?y1 ?x2 ?y2 ?body))
+)
 
 
 
@@ -392,7 +401,7 @@
 
 ;; Step limit is reached:
 (<= stepLimit
-    (true (step 40)))
+    (true (step 10)))
 
 
 ;; TODO: Player is dead when it ran into the head of the other player
