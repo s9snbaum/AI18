@@ -204,11 +204,6 @@
 )
 
 
-;only left is possible; TODO: delete this
-;(legal red moveLeft)
-;(legal blue moveLeft)
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Updating state
@@ -298,19 +293,25 @@
 ;; TODO: set the following auxilary relation if the player is going to move onto
 ;; apple cell
 ;; Example rule head:
-;(<= (movingOntoApple ?player)
-	;(head ?head ?player)
-	;(does ?move ?player)
-	;()
-;)
+(<= (movingOntoApple ?player)
+    (head ?head ?player)
+    (does ?player ?move)
+    (nextCell ?move ?x1 ?y1 ?x2 ?y2)
+    (true (cell ?x1 ?y1 ?head))
+    (true (cell ?x2 ?y2 apple))
+)
 
 
 ;; TODO: set the following auxilary relation if the player is going to move onto
 ;; coin cell
 ;; Example rule head:
-; (<= (movingOntoCoin ?player)
-;;;;; ... rule body ...
-; )
+(<= (movingOntoCoin ?player)
+    (head ?head ?player)
+    (does ?player ?move)
+    (nextCell ?move ?x1 ?y1 ?x2 ?y2)
+    (true (cell ?x1 ?y1 ?head))
+    (true (cell ?x2 ?y2 coin))
+)
 
 
 
@@ -331,19 +332,21 @@
 ;; TODO: points stay the same if the player does not move onto either a coin cell
 ;; or an apple cell
 ;; Example rule head:
-; (<= (next (collectedPoints ?player ?i))
-;;;;; ... rule body ...
-; )
-
-
+(<= (next (collectedPoints ?player ?i))
+    (not (movingOntoApple ?player))
+    (not (movingOntoCoin ?player))
+    (true (collectedPoints ?player ?i))
+)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; if player moves onto coin cell
 
 ;; TODO: increase points by three if the player moves onto a coin cell
 ;; Example rule head:
-; (<= (next (collectedPoints ?player ?j))
-;;;;; ... rule body ...
-; )
+(<= (next (collectedPoints ?player ?j))
+    (movingOntoCoin ?player)
+    (true (collectedPoints ?player ?i))
+    (plusthree ?i ?j)
+)
 
 
 
@@ -351,9 +354,11 @@
 
 ;; TODO: increase points by one
 ;; Example rule head:
-; (<= (next (collectedPoints ?player ?j))
-;;;;; ... rule body ...
-; )
+(<= (next (collectedPoints ?player ?j))
+    (movingOntoApple ?player)
+    (true (collectedPoints ?player ?i))
+    (plusone ?i ?j)
+)
 
 
 ;; TODO: Snake is extended: tail remains at current position.
@@ -392,21 +397,26 @@
 
 ;; TODO: Player is dead when it ran into the head of the other player
 ;; Example rule head for blue player:
-; (<= (dead blue)
-;;;;; ... rule body ...
-; )
+(<= (dead blue)
+    (true (cell ?x ?y blueHead))
+    (true (cell ?x ?y redHead))
+)
 ;
 ;; Example rule head for red player:
-; (<= (dead red)
-;;;;; ... rule body ...
-; )
+(<= (dead red)
+    (true (cell ?x ?y redHead))
+    (true (cell ?x ?y blueHead))
+)
 
 
 ;; TODO: Player is dead when it ran into its own or another player's body
 ;; Example rule head:
-; (<= (dead ?player)
-;;;;; ... rule body ...
-; )
+(<= (dead ?player)
+    (head ?head ?player)
+    (or (body ?body red) (body ?body blue))
+    (true (cell ?x ?y ?head))
+    (true (cell ?x ?y ?body))
+)
 
 
 ;; Game is over if either player is dead, or the step limit is reached
