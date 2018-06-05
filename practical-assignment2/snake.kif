@@ -190,15 +190,17 @@
 ;;;;;;        action executed by ?player
 ; )
 
-
+;Here we define the legal moves allowed to each player.
 (<= (legal ?player ?move)
-	;(1)
+	;;(1) A move is legal if the next cell that the head moves to is not a wall and ...
     (head ?head ?player)
 	(nextCell ?move ?x1 ?y1 ?x2 ?y2)
 	(true (cell ?x1 ?y1 ?head))
 	(not (true (cell ?x2 ?y2 wall)))
     
-    ;(2)
+    ;;(2) The next cell that the head moves into is not connected to
+    ;; the head (This is done to ensure move does not occur in opposite direction of previous
+    ;;movement).
     (body ?body ?player)
     (not (true (connected ?x2 ?y2 ?x1 ?y1 ?body)))
 )
@@ -227,8 +229,9 @@
     (true (cell ?x ?y coin)))
 
 
-;; TODO: Apple is not consumed if none of the players move onto it
-;; Example rule head:
+;; Apple is not consumed if none of the players move onto it
+;;Cell x,y has apple in the next state, if in the current state,
+;;cell x,y has Apple and does not have head of either player in it.
 (<= (next (cell ?x ?y apple))
 	(true (cell ?x ?y apple))
 	(not (true (cell ?x ?y redHead)))
@@ -240,8 +243,9 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; moving snakes
 
-;; TODO: Head is moved to destination cell
-;; Example rule head:
+;;Head is moved to destination cell
+;; The new position for the head will be x2,y2 if currently for the player, the head of the player
+;; is at x1,y1 and the player executes a move such that the destination is x2,y2.
 (<= (next (cell ?x2 ?y2 ?head))
 	(head ?head ?player)
 	(does ?player ?move)
@@ -250,14 +254,17 @@
 )
 
 
-;; TODO: Non-tail body cells remain body cells
-;; Example rule head:
+;;Non-tail body cells remain body cells
+;;A cell x2,y2 is a body cell in the next state, if in the current state, it is a body cell
+;; and is not a tail. 
 (<= (next (cell ?x2 ?y2 ?body))
 	(tail ?tail ?body)
 	(true (cell ?x2 ?y2 ?body))
 	(not (true (cell ?x2 ?y2 ?tail)))
 )
 
+;;A cell at x2,y2 is a body cell in the next state, if it is occupied by the head of the player
+;;in the current state.
 (<= (next (cell ?x2 ?y2 ?body))
     (body ?body ?player)
     (head ?head ?player)
@@ -265,8 +272,9 @@
 )
 
 
-;; TODO: connected facts for non-tail cells remain invariant
-;; Example rule head:
+;;Connected facts for non-tail cells remain invariant
+;;A cell x1,y1 is connected to x2,y2 in the next state, if at the current state
+;;the cell x1,y1 is connected to x2,y2 and is not tail. 
 (<= (next (connected ?x1 ?y1 ?x2 ?y2 ?body))
 	(tail ?tail ?body)
     (true (connected ?x1 ?y1 ?x2 ?y2 ?body))
@@ -274,10 +282,10 @@
 )
 
 
-;; TODO: ceate new connected fact, connecting previous head cell to the new
+;;Ceate new connected fact, connecting previous head cell to the new
 ;; head cell
-;; Example rule head:
-
+;;The cell x1,y1 is connected to x2,y2 in the next cell, if in the current state,
+;;x1,y1 has the head of the player, and the player moves to x2,y2.
 (<= (next (connected ?x1 ?y1 ?x2 ?y2 ?body))
 	(body ?body ?player)
     (does ?player ?move)
@@ -291,7 +299,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; auxilary relations
 
 ;; Define function moveOntoApple for player to check if the next cell has an apple
-;; Thsi function is used as a predicate to extend length and reward points
+;; This function is used as a predicate to extend length and reward points
 
 (<= (movingOntoApple ?player)
     (does ?player ?move)
