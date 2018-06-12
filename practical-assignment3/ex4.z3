@@ -25,6 +25,9 @@
 		(and (GrowsIn y1 x)
 		     (GrowsIn y2 x)
 		     (GrowsIn y3 x)
+		     (not (= y1 y2))
+		     (not (= y2 y3))
+		     (not (= y1 y3))
 		     (forall ((y Plant)) (=> (GrowsIn y x) (or (= y y1) (= y y2) (= y y3))))
 		)
 	)
@@ -44,9 +47,10 @@
 				     (= y1 apple)
 				     (= y2 banana)
 				     (= y3 cherry)
+				)
 			)
 	)
-))
+)
 
 (assert (distinct (distinct (hasThree garden1) (hasThree garden2)) (distinct (hasThree garden3) (hasThree garden4))))
 
