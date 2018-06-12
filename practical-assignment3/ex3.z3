@@ -15,14 +15,16 @@
 
 ; 3.
 (assert (forall ((x Int) (y Int)) (=> (or (p x y) (q x y))
-	    	    	      	    (forall ((z Int)) (=> (or (p y z) (q y z))
-			      	      	      	    	(r x z)
-					      	      )
-			 	    )
+	    	    	      	      (forall ((z Int)) (=> (or (p y z) (q y z))
+			      	      	      	    	    (r x z)
+					      	        )
+			 	      )
 	    	    	          )
         )
 )
 
+; Assert the negated conclusion and check for unsatisfiability
+(assert (not (forall ((x Int)) (exists ((y Int)) (r x y)))))
 
 (check-sat)
 
