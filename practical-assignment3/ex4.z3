@@ -16,16 +16,39 @@
 
 
 ;; TODO: constraint 1
-
+(assert (forall ((x Plant)) (or (Fruit x) (Flower x) (Vegetable x))))
 
 ;; TODO: constraint 2
-
+(assert
+(forall ((x Garden))
+	(exists ((y1 Plant) (y2 Plant) (y3 Plant))
+		(and (GrowsIn y1 x)
+		     (GrowsIn y2 x)
+		     (GrowsIn y3 x)
+		     (forall ((y Plant)) (=> (GrowsIn y x) (or (= y y1) (= y y2) (= y y3))))
+		)
+	)
+))
 
 ;; TODO: constraint 3
-
+(assert (forall ((x Plant)) (exists ((y Garden)) (GrowsIn x y))))
 
 ;; TODO: constraint 4
+(declare-fun hasThree (Garden) Bool)
+(assert
+(forall ((x Garden))
+	(= (hasThree x) (exists ((y1 Plant) (y2 Plant) (y3 Plant))
+	   	     		(and (GrowsIn y1 x)
+				     (GrowsIn y2 x)
+				     (GrowsIn y3 x)
+				     (= y1 apple)
+				     (= y2 banana)
+				     (= y3 cherry)
+			)
+	)
+))
 
+(assert (distinct (distinct (hasThree garden1) (hasThree garden2)) (distinct (hasThree garden3) (hasThree garden4))))
 
 ;; TODO: constraint 5
 
