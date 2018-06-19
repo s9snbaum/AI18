@@ -15,26 +15,33 @@
 (assert (forall ((x Plant)) (= (Vegetable x) (or (= x onion) (= x carrot) (= x pepper)))))
 
 
-;; TODO: constraint 1
+;; constraint 1: Any plant is either a fruit, a flower, or a vegetable.
 (assert (forall ((x Plant)) (or (Fruit x) (Flower x) (Vegetable x))))
 
-;; TODO: constraint 2
+
+;; constraint 2: Everybody grows exactly 3 different plants.
 (assert
 (forall ((x Garden))
+	;; there are at least three plants that grow in x
 	(exists ((y1 Plant) (y2 Plant) (y3 Plant))
 		(and (GrowsIn y1 x)
 		     (GrowsIn y2 x)
 		     (GrowsIn y3 x)
 		     (distinct y1 y2 y3)
+		     ;; and there is no other plant in this garden that is different from all of these three (at most three plants)
 		     (forall ((y Plant)) (=> (GrowsIn y x) (or (= y y1) (= y y2) (= y y3))))
 		)
 	)
 ))
 
-;; TODO: constraint 3
+
+;; constraint 3: Every plant is in at least one garden.
 (assert (forall ((x Plant)) (exists ((y Garden)) (GrowsIn x y))))
 
-;; TODO: constraint 4
+
+;; constraint 4: Exactly one garden has all 3 kinds of fruits.
+
+;; define hasThree(x) <=> garden x has all three kinds of fruit
 (declare-fun hasThree (Garden) Bool)
 (assert
 (forall ((x Garden))
@@ -51,10 +58,13 @@
 	)
 ))
 
+;; assert that exactly one garden satisfies this predicate
 (assert (distinct (distinct (hasThree garden1) (hasThree garden2)) (distinct (hasThree garden3) (hasThree garden4))))
 
-;; TODO: constraint 5
+
+;; constraint 5: Exactly 3 plants are in 2 or more gardens and they are one vegetable and two fruits.
 (assert (exists ((y1 Plant) (y2 Plant) (y3 Plant) (x1 Garden) (x2 Garden) (x3 Garden) (x4 Garden) (x5 Garden) (x6 Garden))
+		;; for each of the three plants exist two distinct gardens that they grow in
 		(and (Vegetable y1) (Fruit y2) (Fruit y3)
 		     (GrowsIn y1 x1) (GrowsIn y1 x2)
 		     (GrowsIn y2 x3) (GrowsIn y2 x4)
@@ -63,6 +73,7 @@
 		     (distinct x1 x2)
 		     (distinct x3 x4)
 		     (distinct x5 x6)
+		     ;; every plant that is not one of those three can only grow in a single garden
 		     (forall ((y4 Plant)) (=> (and (distinct y4 y1) (distinct y4 y2) (distinct y4 y3))
 		     	     	  	      (forall ((x7 Garden) (x8 Garden)) (=> (and (GrowsIn y4 x7) (GrowsIn y4 x8)) (= x7 x8)))
 					  )
@@ -71,25 +82,26 @@
 	)
 )
 
-;; TODO: constraint 6
+;; constraint 6: There is no garden that grows both rose and carrots.
+;; if there are gardens that contain a rose and a carrot, respectively, then they must be distinct.
 (assert (forall ((x1 Garden) (x2 Garden)) (=> (and (GrowsIn rose x1) (GrowsIn carrot x2)) (distinct x1 x2))))
 
-;; TODO: constraint 7
+;; constraint 7: Any garden with tulip has another flower.
 (assert (forall ((x Garden) (y1 Plant))
 		(=> (and (GrowsIn y1 x) (= y1 tulip))
 		    (exists ((y2 Plant)) (and (GrowsIn y2 x) (Flower y2) (distinct y1 y2)))))
 )
 
-;; TODO: constraint 8
+;; constraint 8: Garden1 has one fruit, one vegetable and one flower.
 (assert (exists ((y1 Plant) (y2 Plant) (y3 Plant)) (and (GrowsIn y1 garden1) (GrowsIn y2 garden1) (GrowsIn y3 garden1)
 		     	    	       	   	   	(Flower y1) (Vegetable y2) (Fruit y3)))
 )
 
-;; TODO: constraint 9
+;; constraint 9: Garden2 has no flowers.
 (assert (forall ((y1 Plant)) (=> (GrowsIn y1 garden2) (not (Flower y1))))
 )
 
-;; TODO: constraint 10
+;; constraint 10: Gardens 1 and 4 have carrots and Garden3 has bananas.
 (assert (exists ((y1 Plant) (y2 Plant) (y3 Plant)) (and (GrowsIn y1 garden1) (GrowsIn y2 garden4) (GrowsIn y3 garden3)
 		     	    	       	   	   	(= y1 carrot) (= y2 carrot) (= y3 banana)))
 )
