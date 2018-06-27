@@ -16,6 +16,7 @@
 	    (carHead ?c ?px ?p3y)
 	    (carTail ?c ?px ?p1y)
 	    (plusone ?p3y ?p4y)
+	    (plusone ?p1y ?p2y)
 	    (not (isOccupied ?px ?p4y))
         )
         :effect (and
@@ -36,6 +37,7 @@
 	    (carHead ?c ?px ?p4y)
 	    (carTail ?c ?px ?p2y)
 	    (plusone ?p3y ?p4y)
+	    (plusone ?p1y ?p2y)
 	    (not (isOccupied ?px ?p1y))
         )
         :effect (and
@@ -43,8 +45,8 @@
 	    (carHead ?c ?px ?p3y)
 	    (carTail ?c ?px ?p1y)
 	    (isOccupied ?px ?p1y)
-	    (not (carHead ?px ?p4y))
-	    (not (carTail ?px ?p2y))
+	    (not (carHead ?c ?px ?p4y))
+	    (not (carTail ?c ?px ?p2y))
 	    (not (isOccupied ?px ?p4y))
         )
     )
@@ -56,6 +58,7 @@
 	    (carHead ?c ?p4x ?py)
 	    (carTail ?c ?p2x ?py)
 	    (plusone ?p3x ?p4x)
+	    (plusone ?p1x ?p2x)
 	    (not (isOccupied ?p1x ?py))
         )
         :effect (and
@@ -76,7 +79,8 @@
 	    (carHead ?c ?p3x ?py)
 	    (carTail ?c ?p1x ?py)
 	    (plusone ?p3x ?p4x)
-	    (not (isOccupied ?c ?p4x ?py))
+	    (plusone ?p1x ?p2x)
+	    (not (isOccupied ?p4x ?py))
         )
         :effect (and
             ;; TODO
