@@ -4,7 +4,7 @@
         loc1_1 loc1_2 loc1_3 loc1_4 loc1_5 loc1_6 loc2_1 loc2_2 loc2_3 loc2_4 loc2_5 loc2_6 loc3_1 loc3_2 loc3_3 loc3_4 loc3_5 loc3_6 loc4_1 loc4_2 loc4_3 loc4_4 loc4_5 loc4_6 loc5_1 loc5_2 loc5_3 loc5_4 loc5_5 loc5_6 loc6_1 loc6_2 loc6_3 loc6_4 loc6_5 loc6_6  - position
         red car1 car3 car4 car5 car6 car10 car13 car14 car16 car17 car18 - car
     )
-    (:init
+    (:init 
         (ADJACENT loc1_1 loc2_1 loc3_1)
         (ADJACENT loc3_1 loc2_1 loc1_1)
         (ADJACENT loc2_1 loc3_1 loc4_1)
@@ -171,6 +171,7 @@
 	(containsCar loc2_6 car18)
 	(containsCar loc3_6 car18)
 	(containsCar loc4_6 car10)
+	
     )
     (:goal (and
         (containsCar loc5_3 red)

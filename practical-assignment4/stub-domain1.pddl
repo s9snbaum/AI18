@@ -14,6 +14,8 @@
         :parameters (?c - car ?p1 - position ?p2 - position ?p3 - position)
         :precondition (and
 	    ;TODO
+	    (ADJACENT ?p1 ?p2 ?p3)
+	    (SMALL ?c)
             (containsCar ?p1 ?c)
 	    (containsCar ?p2 ?c)
 	    (not (isOccupied ?p3))
@@ -30,7 +32,10 @@
     (:action move-large
         :parameters (?c - car ?p1 - position ?p2 - position ?p3 - position ?p4 - position)
         :precondition (and
-	    ;TODO 
+	    ;TODO
+	    (ADJACENT ?p1 ?p2 ?p3)
+	    (ADJACENT ?p2 ?p3 ?p4)
+	    (LARGE ?c)
 	    (containsCar ?p1 ?c)
 	    (containsCar ?p2 ?c)
 	    (containsCar ?p3 ?c)
