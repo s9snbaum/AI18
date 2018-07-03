@@ -21,7 +21,8 @@
        ; (plusone y6 y7)
     
     
-        ;; TODO
+        ;; Define the fields occupied by the cars in terms of x and y coordinates
+        ;; Define position of features of each car, such as Car Head and Car Tail, in X and Y coordinates
 
         (isOccupied x1 y1)
         (isOccupied x4 y1)
